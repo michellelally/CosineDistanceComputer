@@ -2,8 +2,15 @@ package ie.gmit.sw;
 
 public class Index {
 	
-	private int frequency; 
+	private int frequency = 0; 
 	private String fileName;
+	
+	public Index(int frequency, String fileName) {
+		super();
+		this.frequency += frequency;
+		this.fileName = fileName;
+	}
+	
 	public int getFrequency() {
 		return frequency;
 	}
@@ -16,6 +23,7 @@ public class Index {
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	} 
+
 	
 	
 

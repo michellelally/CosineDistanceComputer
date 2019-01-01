@@ -1,11 +1,14 @@
 package ie.gmit.sw;
 
 import java.io.*;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 
 public class FileParser implements Runnable {
 	private String file;
 	private BlockingQueue<Shingle> queue;
+	private final int shingleSize = 3;
+	private Deque<String> buffer = new LinkedList<>();
 
 	public FileParser(String file, BlockingQueue<Shingle> queue) {
 		super();
@@ -15,20 +18,49 @@ public class FileParser implements Runnable {
 
 	@Override
 	public void run() {
+		parse();
+	}
+
+	public void parse() {
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(this.file)));
 			String line = null;
 			String[] words = null;
-			while ((line = br.readLine()) != null) {
-				words = line.split(" ");
+			while ((line = br.readLine().toLowerCase()) != null) {
+				words = line.split("\\s+");
+				addWordsToBuffer(words);
+				Shingle s = getShingle();
+				queue.put(s);
 			}
-			for (String s : words) {
-				queue.put(new Shingle(file, s.toLowerCase()));
-				queue.put(new Poison(file, s.toLowerCase()));
-			}
-			
+			queue.put(new Poison(file, 0));
+			br.close();
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void addWordsToBuffer(String[] words) {
+		for (String s : words) {
+			buffer.add(s);
+		}
+	}
+
+	private Shingle getShingle() {
+		StringBuilder sb = new StringBuilder();
+		int ctr = 0;
+		while (ctr < shingleSize) {
+			if (buffer.peek() != null) {
+				sb.append(buffer.poll());
+				ctr++;
+			} else {
+				ctr = shingleSize;
+			}
+		}
+
+		if (sb.length() > 0) {
+			return (new Shingle(file, sb.toString().hashCode()));
+		} else {
+			return null;
 		}
 	}
 

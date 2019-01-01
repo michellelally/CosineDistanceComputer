@@ -2,12 +2,12 @@ package ie.gmit.sw;
 
 public class Shingle {
 	private String file;
-	private String shingle;
+	private int shingleHashCode;
 	
-	public Shingle(String file, String shingle) {
+	public Shingle(String file, int shingle) {
 		super();
 		this.file = file;
-		this.shingle = shingle;
+		this.shingleHashCode = shingle;
 	}
 	
 	public String getFile() {
@@ -16,11 +16,14 @@ public class Shingle {
 	public void setFile(String file) {
 		this.file = file;
 	}
-	public String getShingle() {
-		return shingle;
+
+	public int getShingleHashCode() {
+		return shingleHashCode;
 	}
-	public void setShingle(String shingle) {
-		this.shingle = shingle;
+
+	public void setShingleHashCode(int shingleHashCode) {
+		this.shingleHashCode = shingleHashCode;
 	}
+
 
 }
