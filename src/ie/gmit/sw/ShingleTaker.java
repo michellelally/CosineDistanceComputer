@@ -12,14 +12,18 @@ public class ShingleTaker implements Runnable {
 
 	@Override
 	public void run() {
-		while (fileCount > 0 && keepRunning) {
+		
+	}
+	
+    public Map<Integer, Index> getShingleFrequencyMap() {
+    	while (fileCount > 0 && keepRunning) {
 			try {
 				Shingle s = queue.take();
 				if (s instanceof Poison) {
 					fileCount--;
 				} else {
-					int shingle = s.getShingleHashCode();
 					List<Index> list = null;
+					int shingle = s.getShingleHashCode();
 					if (!db.containsKey(shingle)) {
 						list = new ArrayList<Index>();
 						list.add(new Index(1, s.getFile()));
@@ -33,15 +37,36 @@ public class ShingleTaker implements Runnable {
 			}
 
 		}
-	}
-	
-    public static Map<String, Index> getTermFrequencyMap(List<Index> ) {
-    	Map<String, Index> termFrequencyMap = new HashMap<>();
-        for ( : terms) {
-            Index n = termFrequencyMap.get(term);
-            n = (n == null) ? 1 : ++n;
-            termFrequencyMap.put(term, n);
+    	return db;
+    }
+    
+    public double cosineSimilarity(String text1, String text2) {
+        //Get vectors
+        Map<Integer, Index> a = getShingleFrequencyMap();
+        Map<Integer, Index> b = getShingleFrequencyMap();
+
+        //Get unique words from both sequences
+        HashSet<Integer> intersection = new HashSet<>(a.keySet());
+        intersection.retainAll(b.keySet());
+
+        double dotProduct = 0, magnitudeA = 0, magnitudeB = 0;
+
+        //Calculate dot product
+        for (Integer item : intersection) {
+            dotProduct += a.get(item) * b.get(item);
         }
-        return termFrequencyMap;
+
+        //Calculate magnitude a
+        for (Integer k : a.keySet()) {
+            magnitudeA += Math.pow(a.get(k), 2);
+        }
+
+        //Calculate magnitude b
+        for (Integer k : b.keySet()) {
+            magnitudeB += Math.pow(b.get(k), 2);
+        }
+        
+        //return cosine similarity
+        return dotProduct / Math.sqrt(magnitudeA * magnitudeB);
     }
 }
