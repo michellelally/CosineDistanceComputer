@@ -24,6 +24,10 @@ public class Index {
 		this.fileName = fileName;
 	} 
 
+	   @Override
+	    public String toString() {
+	        return "" + frequency;
+	    }
 	
 	
 

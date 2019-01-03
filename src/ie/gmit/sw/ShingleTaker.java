@@ -2,6 +2,7 @@ package ie.gmit.sw;
 
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
+import java.util.function.BiConsumer;
 
 public class ShingleTaker implements Runnable {
 
@@ -45,14 +46,23 @@ public class ShingleTaker implements Runnable {
         Map<Integer, Index> a = getShingleFrequencyMap();
         Map<Integer, Index> b = getShingleFrequencyMap();
 
-        //Get unique words from both sequences
-        HashSet<Integer> intersection = new HashSet<>(a.keySet());
-        intersection.retainAll(b.keySet());
+        
+//        Set<Map.Entry<String, String>> countryISOCodeEntries = countryISOCodeMapping.entrySet();
+//        
+//		Index intersection = db.get(1);
+//		intersection.retainAll(map.get(2));
+//        //Get unique words from both sequences
+        HashSet<Index> intersection = new HashSet<>(a.values());
+        intersection.retainAll(b.values());
 
         double dotProduct = 0, magnitudeA = 0, magnitudeB = 0;
 
+		db.forEach((shingleHashCode, frequency) -> {
+			
+		});
+        
         //Calculate dot product
-        for (Integer item : intersection) {
+        for (Index item : intersection) {
             dotProduct += a.get(item) * b.get(item);
         }
 
