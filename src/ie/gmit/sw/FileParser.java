@@ -9,11 +9,13 @@ public class FileParser implements Runnable, Parsator {
 	private BlockingQueue<Shingle> queue;
 	private final int shingleSize = 3;
 	private Deque<String> buffer = new LinkedList<>();
+	private int id;
 
-	public FileParser(String file, BlockingQueue<Shingle> queue) {
+	public FileParser(String file, BlockingQueue<Shingle> queue, int id) {
 		super();
 		this.file = file;
 		this.queue = queue;
+		this.id = id;
 	}
 
 	@Override
@@ -23,24 +25,27 @@ public class FileParser implements Runnable, Parsator {
 
 	@Override
 	public void parse() {
+		String line = null;
+		String[] words = null;
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(this.file)));
-			String line = null;
-			String[] words = null;
 			while ((line = br.readLine().toLowerCase().replaceAll("[^A-Za-z0-9]", "")) != null) {
-				words = line.split("\\s+");
-				addWordsToBuffer(words);
-				Shingle s = getShingle();
-				queue.put(s);
+				if (line.length() > 0) {
+					words = line.split("\\s+");
+					addWords(words);
+					Shingle s = getShingle();
+					s.setFile(id);
+					queue.put(s);
+				}	
 			}
-			queue.put(new Poison(file, 0));
+			flush();
 			br.close();
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void addWordsToBuffer(String[] words) {
+	private void addWords(String[] words) {
 		for (String s : words) {
 			buffer.add(s);
 		}
@@ -58,10 +63,20 @@ public class FileParser implements Runnable, Parsator {
 			}
 		}
 		if (sb.length() > 0) {
-			return (new Shingle(file, sb.toString().hashCode()));
+			return (new Shingle(id, sb.toString().hashCode()));
 		} else {
 			return null;
 		}
+	}
+	
+	private void flush() throws InterruptedException {
+		while (buffer.size() > 0) {
+			Shingle s = getShingle();
+			if (s != null) {
+				queue.put(s);
+			}
+		}
+		queue.put(new Poison(id, 0));
 	}
 
 }

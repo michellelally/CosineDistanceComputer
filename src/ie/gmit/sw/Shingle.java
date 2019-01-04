@@ -1,19 +1,19 @@
 package ie.gmit.sw;
 
 public class Shingle {
-	private String file;
+	private int file;
 	private int shingleHashCode;
 	
-	public Shingle(String file, int shingle) {
+	public Shingle(int file, int shingle) {
 		super();
 		this.file = file;
 		this.shingleHashCode = shingle;
 	}
 	
-	public String getFile() {
+	public int getFile() {
 		return file;
 	}
-	public void setFile(String file) {
+	public void setFile(int file) {
 		this.file = file;
 	}
 
