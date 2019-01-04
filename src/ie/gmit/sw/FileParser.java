@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 
-public class FileParser implements Runnable {
+public class FileParser implements Runnable, Parsator {
 	private String file;
 	private BlockingQueue<Shingle> queue;
 	private final int shingleSize = 3;
@@ -21,12 +21,13 @@ public class FileParser implements Runnable {
 		parse();
 	}
 
+	@Override
 	public void parse() {
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(this.file)));
 			String line = null;
 			String[] words = null;
-			while ((line = br.readLine().toLowerCase()) != null) {
+			while ((line = br.readLine().toLowerCase().replaceAll("[^A-Za-z0-9]", "")) != null) {
 				words = line.split("\\s+");
 				addWordsToBuffer(words);
 				Shingle s = getShingle();
@@ -56,7 +57,6 @@ public class FileParser implements Runnable {
 				ctr = shingleSize;
 			}
 		}
-
 		if (sb.length() > 0) {
 			return (new Shingle(file, sb.toString().hashCode()));
 		} else {

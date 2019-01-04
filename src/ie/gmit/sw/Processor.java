@@ -16,7 +16,11 @@ public class Processor {
 			i++;
 		}
 		Thread T1 = new Thread(new FileParser(query, queue));
-	//	Thread T2 = new Thread(new ShingleTaker()
+		
+		ExecutorService pool = Executors.newFixedThreadPool(2);
+		
+		
+		
 		
 		
 		

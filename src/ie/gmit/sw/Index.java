@@ -5,10 +5,9 @@ public class Index {
 	private int frequency = 0; 
 	private String fileName;
 	
-	public Index(int frequency, String fileName) {
+	public Index(int frequency) {
 		super();
 		this.frequency += frequency;
-		this.fileName = fileName;
 	}
 	
 	public int getFrequency() {
