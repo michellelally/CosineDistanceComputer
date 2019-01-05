@@ -8,8 +8,16 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 
+/**
+ * 
+ * @author G00351333
+ * @author Michelle Lally
+ * 
+ */
+
 public class ShingleTaker implements Runnable{
 
+	//Local Variables
 	private Map<Integer, Integer> subject = new TreeMap<>();
 	private Map<Integer, Integer> query = new TreeMap<>();
 	private BlockingQueue<Shingle> queue;

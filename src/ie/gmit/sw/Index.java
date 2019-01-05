@@ -1,5 +1,12 @@
 package ie.gmit.sw;
 
+/**
+ * 
+ * @author G00351333
+ * @author Michelle Lally
+ * 
+ */
+
 public class Index {
 	
 	private int frequency = 0; 

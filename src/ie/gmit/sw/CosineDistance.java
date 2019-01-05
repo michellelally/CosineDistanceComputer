@@ -4,6 +4,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * 
+ * @author G00351333
+ * @author Michelle Lally
+ * 
+ */
+
 public class CosineDistance {
 
 	
